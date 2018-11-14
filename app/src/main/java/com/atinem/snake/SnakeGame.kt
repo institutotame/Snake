@@ -39,7 +39,7 @@ class SnakeGame(context : Context, size : Point) : SurfaceView(context) {
     private val mSurfaceHolder : SurfaceHolder
     private val mPaint : Paint
 
-    //private val mSnake : SnakeGame
+    private val mSnake : Snake
     private val mApple : Apple
 
     private lateinit var job : Job
@@ -78,11 +78,12 @@ class SnakeGame(context : Context, size : Point) : SurfaceView(context) {
         mPaint = Paint()
 
         mApple = Apple(context, Point(NUM_BLOCK_WIDE.toInt(), mNumbBlocksHigh.toInt()),blockSize)
+        mSnake = Snake(context, Point(NUM_BLOCK_WIDE.toInt(), mNumbBlocksHigh.toInt()), blockSize.toInt())
     }
 
     fun newGame(){
         //reset the snake
-
+        mSnake.reset(NUM_BLOCK_WIDE.toInt(), mNumbBlocksHigh.toInt())
         //get the apple ready
         mApple.spawn()
         //reset the score
