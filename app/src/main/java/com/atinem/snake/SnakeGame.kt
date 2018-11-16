@@ -121,10 +121,20 @@ class SnakeGame(context : Context, size : Point) : SurfaceView(context) {
 
     fun update(){
         //Move the snake
-
+        mSnake.move()
         //Did the head of the snake eat the apple?
+        if(mSnake.checkDinner(mApple.mLocation)){
+            mApple.spawn()
 
+            mScore += 1
+
+            mSP.play(mEatID, 1f, 1f, 0,0,1f)
+        }
         //Did the snake die?
+        if(mSnake.detectDeath()){
+            mSP.play(mCrashID,1f,1f,0,0,1f)
+            mPaused = true
+        }
     }
 
     fun draw(){
@@ -139,6 +149,7 @@ class SnakeGame(context : Context, size : Point) : SurfaceView(context) {
 
             //Draw the apple and the snake
             mApple.draw(canvas,mPaint)
+            mSnake.draw(canvas, mPaint)
             //Draw some text while paused
             if(mPaused){
                 mPaint.color = Color.argb(255,255,255,255)
@@ -163,7 +174,7 @@ class SnakeGame(context : Context, size : Point) : SurfaceView(context) {
                 }
 
                 //Let the Snake class handle the input
-
+                mSnake.switchHeading(event)
             }
         }
         return true
