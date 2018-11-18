@@ -2,7 +2,6 @@ package com.atinem.snake
 
 import android.content.Context
 import android.graphics.*
-import android.provider.Settings
 import android.view.MotionEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -33,17 +32,19 @@ class Snake(context : Context, mr : Point, ss : Int) {
 
     init{
         GlobalScope.launch(Dispatchers.IO) {
+            val bitmapHead = BitmapFactory.decodeResource(context.resources, R.drawable.head)
+            val bitmapBody = BitmapFactory.decodeResource(context.resources, R.drawable.body)
+            mBitmapHeadRight = Bitmap.createScaledBitmap(bitmapHead, ss, ss,false)
             val matrix = Matrix()
             matrix.preScale(-1f, 1f)
-            mBitmapHeadRight = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.resources, R.drawable.head), ss, ss,false)
-            mBitmapHeadLeft  = Bitmap.createBitmap(BitmapFactory.decodeResource(context.resources, R.drawable.head), 0, 0, ss, ss, matrix, true)
+            mBitmapHeadLeft  = Bitmap.createBitmap(mBitmapHeadRight, 0, 0, ss, ss, matrix, false)
             matrix.preRotate(-90f)
-            mBitmapHeadUp = Bitmap.createBitmap(BitmapFactory.decodeResource(context.resources, R.drawable.head), 0, 0, ss, ss, matrix, true)
+            mBitmapHeadUp = Bitmap.createBitmap(mBitmapHeadRight, 0, 0, ss, ss, matrix, true)
 
             matrix.preRotate(180f)
-            mBitmapHeadDown  = Bitmap.createBitmap(BitmapFactory.decodeResource(context.resources, R.drawable.head), 0, 0, ss, ss, matrix, true)
+            mBitmapHeadDown  = Bitmap.createBitmap(mBitmapHeadRight, 0, 0, ss, ss, matrix, true)
 
-            mBitmapBody = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.resources, R.drawable.body), ss, ss, false)
+            mBitmapBody = Bitmap.createScaledBitmap(bitmapBody, ss, ss, false)
         }
     }
 
@@ -57,9 +58,9 @@ class Snake(context : Context, mr : Point, ss : Int) {
 
     fun move(){
         for(i in (segmentLocations.size -1) downTo 1){
-            segmentLocations.get(i).x = segmentLocations.get(i-1).x
+            segmentLocations[i].x = segmentLocations[i-1].x
 
-            segmentLocations.get(i).y = segmentLocations.get(i-1).y
+            segmentLocations[i].y = segmentLocations[i-1].y
         }
 
         val p = segmentLocations.get(0)
